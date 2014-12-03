@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<preConditions>
+		<dbms type="postgresql" />
+	</preConditions>
+
+	<changeSet id="init_1" author="reed">
+		<comment>grant permissions for liquibase system's tables</comment>
+		<sql>
+			GRANT SELECT, UPDATE, INSERT ON
+			TABLE databasechangelog TO
+			group_cs;
+			GRANT SELECT, UPDATE, INSERT ON
+			TABLE databasechangeloglock
+			TO group_cs;
+		</sql>
+	</changeSet>
+	<changeSet id="init_0" author="reed">
+		<tagDatabase tag="init" />
+	</changeSet>
+	<!-- include by different versions -->
+<!-- 	<include file="classpath:db/liquibase/v/v2.22.xml"/> -->
+	<!-- <include file="v/v2.22.xml" relativeToChangelogFile="true"/> -->
+	<!-- TMD!!!!!!!!!!!!!there is bug for dbchangelog-3.0.xsd-->
+	<!-- So using local xsd:dbchangelog-3.0.xsd then can set resourceFilter for XMLChangeLogSAXHandler-->
+	<includeAll path="db/liquibase/chu"/>
+	<!-- <includeAll path="v" relativeToChangelogFile="true"/> -->
+
+
+</databaseChangeLog>

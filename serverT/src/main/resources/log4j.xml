@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d [%t] %p %C{1}\t%m%n" />
+        </layout>
+    </appender>
+    <appender name="flume" class="org.apache.flume.clients.log4jappender.Log4jAppender">
+        <param name="Hostname" value="t4.hadoop.lashou.web" />
+        <param name="Port" value="44444" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS}\t%m%n" />
+        </layout>
+    </appender>
+
+    <logger name="com.lashou" additivity="false">
+        <level value="debug" />
+        <appender-ref ref="console" />
+    </logger>
+    <logger name="org.springframework">
+        <level value="debug" />
+        <appender-ref ref="console" />
+    </logger>
+    <logger name="crmlog">
+        <level value="info"/>
+        <appender-ref ref="flume"/>
+    </logger>
+
+    <root>
+        <priority value="info" />
+        <appender-ref ref="console" />
+    </root>
+
+</log4j:configuration>

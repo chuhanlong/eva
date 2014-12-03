@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bean="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-3.2.xsd"
+	default-lazy-init="true">
+	
+	<bean id="liquibase_DataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url"
+			value="jdbc:postgresql://localhost:5432/public" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="maxActive" value="50" />
+		<property name="initialSize" value="5" />
+		<property name="minIdle" value="5" />
+		<property name="maxIdle" value="10" />
+		<property name="defaultAutoCommit" value="true" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="10" />
+		<property name="logAbandoned" value="true" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis"
+			value="600000" />
+		<property name="minEvictableIdleTimeMillis"
+			value="900000" />
+	</bean>
+	<!-- liquibase db migration -->
+	<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase"
+		lazy-init="false">
+		<property name="dataSource" ref="liquibase_DataSource" />
+		<property name="changeLog" value="classpath:db/liquibase/changelog.xml" />
+	</bean>
+
+</beans>

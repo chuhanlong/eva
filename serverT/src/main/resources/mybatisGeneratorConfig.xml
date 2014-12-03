@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+		
+		<!-- home -->
+	<!-- <classPathEntry
+		location="F:\Maven\repo\m2\mysql\mysql-connector-java\5.1.33\mysql-connector-java-5.1.33.jar" />
+		 -->
+		<!-- work -->
+	<classPathEntry
+		location="D:\data\maven_repos\mysql\mysql-connector-java\5.1.33\mysql-connector-java-5.1.33.jar" />
+	<context id="context1">
+		<property name="javaFileEncoding" value="utf-8"/>
+		<!-- pagination plugin -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugin.PaginationMysqlPlugin" />
+		<plugin type="org.mybatis.generator.plugin.CommentPlugin" />
+
+		<commentGenerator>
+			<!-- 不生成注解信息 -->
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+ 
+ 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://127.0.0.1:3306/chu" userId="root"
+			password="root" />
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.chu.dao.domain"
+			targetProject="chu" >
+		</javaModelGenerator>
+		<sqlMapGenerator targetPackage="com.chu.dao.mapper"
+			targetProject="chu" >
+		</sqlMapGenerator>
+		<javaClientGenerator targetPackage="com.chu.dao.mapper"
+			targetProject="chu" type="XMLMAPPER" >
+		</javaClientGenerator>
+			<!--  <table schema="chu" tableName="user" domainObjectName="User" />-->
+			<table schema="chu" tableName="test" domainObjectName="Test" />
+	</context> 
+    
+</generatorConfiguration>
