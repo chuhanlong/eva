@@ -13,7 +13,7 @@
 		<property name="javaFileEncoding" value="utf-8"/>
 		<!-- pagination plugin -->
 		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
-		<plugin type="org.mybatis.generator.plugin.PaginationMysqlPlugin" />
+		<plugin type="org.mybatis.generator.plugin.PaginationPGPlugin" />
 		<plugin type="org.mybatis.generator.plugin.CommentPlugin" />
 
 		<commentGenerator>
