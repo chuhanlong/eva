@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    
+    <changeSet id="cms_6.1_0" author="zhangzhiyong">
+		<tagDatabase tag="cms_5.3" />
+	</changeSet>
+	<changeSet id="cms_6.1_1" author="zhangzhiyong" runOnChange="true">
+		<preConditions onFail="MARK_RAN" onSqlOutput="TEST">
+			<not>
+				<tableExists schemaName="cms" tableName="ad_pay_info" />
+			</not>
+		</preConditions>
+		<comment>add cms.ad_pay_info</comment>
+		<sql>
+			CREATE TABLE cms.ad_pay_info
+			(
+			id bigserial NOT NULL, -- 自增主键
+			pay_bank character varying(200) NOT NULL, --付款银行
+			pay_account_name character varying(200) NOT NULL, --付款户名
+			pay_account_number character varying(50) NOT NULL, --付款账号
+			pay_cost numeric(10,2) NOT NULL, --打款金额
+			pay_time timestamptz NOT NULL, --付款时间
+			lashou_account_number character varying(50) NOT NULL, --拉手收款账号
+			remark text, --给财务的备注
+			path character varying(500), --上传图片
+			hashkey character varying(100) NOT NULL, --关联到ad_images表的hashkey字段
+			status smallint, --状态
+			ctime timestamptz DEFAULT now(), --创建时间
+			mtime timestamptz DEFAULT now(), --最后修改时间
+			author_uid integer NOT NULL, --创建者ID
+ 
+			CONSTRAINT pk_ad_pay_info PRIMARY KEY (id),
+			CONSTRAINT uk_ad_pay_info_hashkey UNIQUE (hashkey)
+			)
+			WITH (OIDS=FALSE);
+			ALTER TABLE cms.ad_pay_info OWNER TO crm_cms_owner;
+			GRANT ALL ON TABLE cms.ad_pay_info TO crm_cms_owner;
+			GRANT SELECT, UPDATE, INSERT ON TABLE cms.ad_pay_info TO group_cms;
+			GRANT SELECT, UPDATE, INSERT ON TABLE cms.ad_pay_info TO group_crm;
+			
+			COMMENT ON TABLE cms.ad_pay_info IS '打款信息表';
+			COMMENT ON COLUMN cms.ad_pay_info.id IS '自增主键';
+			COMMENT ON COLUMN cms.ad_pay_info.pay_bank IS '付款银行';
+			COMMENT ON COLUMN cms.ad_pay_info.pay_account_name IS '付款户名';
+			COMMENT ON COLUMN cms.ad_pay_info.pay_account_number IS '付款账号';
+			COMMENT ON COLUMN cms.ad_pay_info.pay_cost IS '打款金额';
+			COMMENT ON COLUMN cms.ad_pay_info.pay_time IS '付款时间';
+			COMMENT ON COLUMN cms.ad_pay_info.lashou_account_number IS '拉手收款账号';
+			COMMENT ON COLUMN cms.ad_pay_info.remark IS '给财务的备注';
+			COMMENT ON COLUMN cms.ad_pay_info.path IS '上传图片';
+			COMMENT ON COLUMN cms.ad_pay_info.hashkey IS '关联lashou_stat.ad_images表的hashkey字段';
+			COMMENT ON COLUMN cms.ad_pay_info.status IS '状态';
+			COMMENT ON COLUMN cms.ad_pay_info.ctime IS '创建时间';
+			COMMENT ON COLUMN cms.ad_pay_info.mtime IS '最后修改时间';
+			COMMENT ON COLUMN cms.ad_pay_info.author_uid IS '创建者ID';
+	
+			CREATE INDEX idx_ad_pay_info_hashkey ON cms.ad_pay_info USING btree (hashkey);
+			
+			GRANT ALL ON TABLE cms.ad_pay_info_id_seq TO crm_cms_owner;
+			GRANT ALL ON TABLE cms.ad_pay_info_id_seq TO group_crm;
+			GRANT ALL ON TABLE cms.ad_pay_info_id_seq TO group_cms;
+		</sql>
+		<rollback>
+			<dropTable schemaName="cms" tableName="ad_pay_info" />
+		</rollback>
+	</changeSet>
+</databaseChangeLog>
+

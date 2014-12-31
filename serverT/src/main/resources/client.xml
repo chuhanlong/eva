@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+<!-- 	<bean id="userService"
+		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl"
+			value="http://localhost:8080/v-rmi/remoting/userServiceImpl" />
+		<property name="serviceInterface" value="com.reed.rmi.service.UserService" />
+	</bean> -->
+	<bean class="com.reed.rmi.base.AppliactionContextHelper" lazy-init="false"/>
+	
+	<!-- client zk listener -->
+	<bean class="com.reed.rmi.base.ClientZkListener">
+		<property name="useZk" value="false"/>
+		<property name="zkClaster" value="192.168.111.128:2181,192.168.111.129:2181,192.168.111.130:2181"/>
+	</bean>
+	
+	<bean id="scanner" class="com.reed.rmi.client.scanner.ClientServiceScanner">
+		<!-- rpc type,0:httpInvoker;1;Hessian -->
+		<property name="proxyType" value="1"></property>
+		<property name="basePackage"
+			value="com.reed.rmi.service"></property>
+		<property name="serviceUrl" value="http://localhost:8080/rmi-demo/remoting"></property>
+		<property name="readTimeout" value="-1"></property>
+		<property name="connectTimeout" value="3000"></property>
+	</bean>
+
+</beans>

@@ -15,32 +15,30 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
-	<!-- AutoWierd -->
-	<context:component-scan base-package="com.chu.service" >
-	</context:component-scan>
-	<context:annotation-config />
-	<mvc:annotation-driven />
+	<bean class="com.reed.rmi.base.AppliactionContextHelper" lazy-init="false"/>
 	
-	<import resource="classpath:mybatis.xml"/>
-	<import resource="classpath:remote.xml"/>
-	<!-- liquibase 
-	<import resource="classpath:db/liquibase/liquibase.xml"/>-->
-	<!-- 
-	<import resource="classpath:es.xml"/>
-	 -->
-		<!--====================== Configuration ====================== -->
-	<bean id="placeholderConfig"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>file:D:/envs/db.properties</value>
-				<value>file:D:/envs/crm.properties</value>
-			</list>
-		</property>
-		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
-		<property name="order" value="1" />
-		<property name="valueSeparator" value="?" />
+	<!-- remote zk listener -->
+	<bean class="com.reed.rmi.base.RemoteZkListener">
+		<property name="useZk" value="false"/>
+		<property name="zkClaster" value="192.168.111.128:2181,192.168.111.129:2181,192.168.111.130:2181"/>
 	</bean>
 	
+	<!-- scan all invoker service no need to defaine in xml -->
+	<bean id="scanner" class="com.reed.rmi.remote.scanner.RemoteServiceScanner">
+		<!-- rpc type,0:httpInvoker;1;Hessian -->
+		<property name="proxyType" value="1"></property>
+		<!-- more package using ", or ;" to split -->
+		<property name="basePackage"
+			value="com.reed.rmi.service,com.chu.service"></property>
+	</bean>
+
+	<!-- Spring MVC Annotation -->
+	<context:annotation-config />
+	<mvc:annotation-driven />
+
+	<!-- 通过Spring HttpInvoker机制暴露远程访问服务 -->
+	<!-- <bean name="/user" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter"> 
+		<property name="service" ref="userServiceImpl" /> <property name="serviceInterface" 
+		value="com.reed.rmi.service.UserService" /> </bean> -->
+
 </beans>
